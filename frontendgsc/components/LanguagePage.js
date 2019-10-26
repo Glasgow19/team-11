@@ -1,19 +1,8 @@
 import React, { useState } from 'react';
 
-import { View, StyleSheet,Text,Image } from 'react-native';
-import {Card,CardItem,Bottom,Icon} from 'native-base';
+import { View,Text,Image } from 'react-native';
+import {Card,CardItem,Button} from 'native-base';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
-
-const styles = StyleSheet.create({
-    image: {
-      width: 300,
-      height:170,
-      resizeMode: "stretch",
-      margin:0,
-    }
-}); 
-  
-
 const LanguagePage = (props) => {
     var languages = ["English","French","German","Spanish"]
     var [ position, setPosition ] = useState(0);
@@ -33,7 +22,7 @@ const LanguagePage = (props) => {
         }
       }
     const config = {
-        velocityThreshold: 0.1,
+        velocityThreshold: 0.01,
         directionalOffsetThreshold: 200
     };
     const onSwipeUp = (gestureState) => {
@@ -52,33 +41,18 @@ const LanguagePage = (props) => {
             setPosition(position-1);
         }
         setLanguage(languages[position]);
-        // setPath(language);
     }
-     
-    // const onSwipe = (gestureName, gestureState) => {
-    //     const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
-    //     setGestureName(gestureName);
-    //     switch (gestureName) {
-    //       case SWIPE_UP:
-    //         setbgcolor("red");
-    //         break;
-    //       case SWIPE_DOWN:
-    //         setbgcolor("green");
-    //         break;
-    //     }
-    //   }
-
+  
     return (
-        <View style={{ flex: 12,backgroundColor:"#131313",alignContent:"space-between",paddingVertical:100,paddingHorizontal:30,}}>
-             <View style={{ flex: 1}}>
-                <Text style= {{color:"#F1F1F1",fontSize:40,textAlign:"center",fontWeight:"400"}}>
+        <View style={{ flex: 12,backgroundColor:"#131313",justifyContent:"center",paddingVertical:50,paddingHorizontal:30,}}>
+             <View style={{ flex: 2}}>
+                <Text style= {{color:"#F1F1F1",fontSize:35,textAlign:"center",fontWeight:"400"}}>
                     Select a language to proceed
                 </Text>
              </View>
 
-             <View style={{ flex: 2}}>
+             <View style={{ flex: 4, alignSelf:"center",justifyContent:"flex-end",flexDirection:"column"}}>
                 <GestureRecognizer
-                    // onSwipe={onSwipe}
                     onSwipeUp={onSwipeUp}
                     onSwipeDown={onSwipeDown}
                     config={config}
@@ -90,7 +64,7 @@ const LanguagePage = (props) => {
                     <Card style={{borderColor:"#131313"}}>
                     <CardItem style={{flexDirection: "column", justifyContent:"center",alignItems:"center",backgroundColor:"#131313"}}>
                         <Image
-                        style={styles.image}
+                        style={{width: 300, height:170, resizeMode: "stretch",}}
                         source={images[language.toLowerCase()].uri} 
                         />
                         <Text style= {{color:"#F1F1F1",fontSize:30,textAlign:"center",fontFamily:"Roboto Condensed"}}>
@@ -99,7 +73,11 @@ const LanguagePage = (props) => {
                     </CardItem>
                     </Card> 
                 </GestureRecognizer>                 
-
+             </View>
+             <View style={{ flex: 1,justifyContent:"center",alignItems:"center"}}>
+                <Button style = {{ backgroundColor:"#B2FF82",justifyContent:"center",width:300,height:60}}>
+                    <Text style={{fontSize:30, fontWeight:"bold"}}>Continue</Text>
+                </Button>
              </View>
         </View>
     )
