@@ -2,7 +2,6 @@ import React from 'react';
 
 import { View, StyleSheet,Text,Image } from 'react-native';
 import {Card,CardItem,Bottom,Icon} from 'native-base';
-
 const styles = StyleSheet.create({
     image: {
       width: 300,
@@ -28,17 +27,9 @@ const LanguagePage = (props) => {
                     style={styles.image}
                     source={require('../assets/english.png')}
                     />
-                    <Text style= {{color:"#F1F1F1",fontSize:30,textAlign:"center",fontWeight:"100",fontFamily:"Roboto"}}>
+                    <Text style= {{color:"#F1F1F1",fontSize:30,textAlign:"center",fontFamily:"Roboto Condensed"}}>
                         English
                     </Text>
-                    {/* <Bottom>
-                        <Text>fe</Text>
-                    </Bottom> */}
-                {/* <Icon active name="logo-googleplus" />
-                <Text>Google Plus</Text>
-                <Right>
-                    <Icon name="arrow-forward" />
-                </Right> */}
                 </CardItem>
                  </Card>
 
