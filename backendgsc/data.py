@@ -28,7 +28,7 @@ class gammaEvents(graphene.ObjectType):
     ProductMapID = graphene.String()
     lastSync = graphene.String()
 def __repr__(self):
-    print(str(self.TotalBooked))
+    reutn(str(self.TotalBooked))
     #return "<__main__.Camera: distance = " + str(self.distance) + "; speed_limit = " + str(self.speed_limit) + "; number_of_cars = " + str(self.number_of_cars) + ">"
 
 class Query(graphene.ObjectType):
@@ -86,5 +86,5 @@ query = """
 
 if __name__ == "__main__":
     result = schema.execute(query)
-    __repr__(result.data["gammaEvents"])
+    print(str(result))
     #print(result.data["event"])
