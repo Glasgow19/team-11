@@ -124,4 +124,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+backendgsc/saved_images
+
 .DS_Store
