@@ -11,6 +11,8 @@ const LoginPage = (props) => {
             </Text>
             <Button title="Navigate to Home" onPress={() => props.navigation.navigate('HomePage')}>
             </Button>
+            <Button  title="Navigate to Language" onPress={() => props.navigation.navigate('LanguagePage')}>
+            </Button>
         </View>
     )
 }
