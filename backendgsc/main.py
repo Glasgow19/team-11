@@ -13,11 +13,13 @@ def get_distance(x0, y0, x1, y1):
 
 
 def in_center(tl, tr, bl, br, h, w):
-    # center is defined as coords being relatively close to each corner point of the overall image
-    top_left_dist = get_distance(tl[0], tl[1], 0, 0)
-    top_right_dist = get_distance(tr[0], tr[1], w, 0)
-    bottom_left_dist = get_distance(bl[0], bl[1], 0, w)
-    bottom_right_dist = get_distance()
+    # center is defined as coords being relatively close to center point of the overall image
+    # height and width will get passed in as half_height and half_width so need to multiple them to get overall
+    top_left_dist = get_distance(tl[0], tl[1], w, h)
+    top_right_dist = get_distance(tr[0], tr[1], w, h)
+    bottom_left_dist = get_distance(bl[0], bl[1], w, h)
+    bottom_right_dist = get_distance(br[0], br[1], w, h)
+    # todo: this
     return False
 
 
@@ -68,8 +70,8 @@ def describe():
     return_string = "There is {} in your {}."
 
     # check to see if in center
-    if in_center(top_left, top_right, bottom_left, bottom_right):
-        return jsonify({'response': return_string.format(name, 'center')})
+    # if in_center(top_left, top_right, bottom_left, bottom_right):
+    #     return jsonify({'response': return_string.format(name, 'center')})
 
     # rip these if statements. very rudimentary way to find out in which quadrant the object is in
     if bottom_right[0] < half_width and bottom_right[1] < half_height:
@@ -84,6 +86,11 @@ def describe():
     elif top_right[0] < half_width and top_right[1] >= half_height:
         return jsonify({'response': return_string.format(name, 'bottom left')})
     # now to check for intersecting quadrants
+
+    if bottom_right[0] < half_width or top_right[0] < half_width:
+        return jsonify({'response': return_string.format(name, 'left')})
+    elif bottom_left[0] >= half_width or top_left[0] >= half_width:
+        return jsonify({'response': return_string.format(name, 'right')})
 
 
 if __name__ == '__main__':
