@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, Alert, StyleSheet, ActivityIndicator } from 'react-native';
+import { Modal,Dimensions, Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import CaptureButton from './CaptureButton.js'
 
@@ -9,10 +9,14 @@ export default class Camera extends React.Component {
 		super(props);
         this.state = { 
 			identifedAs: '',
-			loading: false
+            loading: false,
+            modalVisible: false
 		}
     }
 
+    setModalVisible(visible) {
+        this.setState({modalVisible: visible});
+    }
     takePicture = async function(){
 		
 		if (this.camera) {
@@ -31,7 +35,7 @@ export default class Camera extends React.Component {
             };
 			
 			// Get the base64 version of the image
-			const data = await this.camera.takePictureAsync(options)
+			// const data = await this.camera.takePictureAsync(options)
 			
 			// Get the identified image
 			// this.identifyImage(data.base64);
@@ -77,7 +81,14 @@ export default class Camera extends React.Component {
 		return (
             <RNCamera ref={ref => {this.camera = ref;}} style={styles.preview}>
             <ActivityIndicator size="large" style={styles.loadingIndicator} color="#fff" animating={this.state.loading}/>
-                <CaptureButton buttonDisabled={this.state.loading} onClick={this.takePicture.bind(this)}/>
+                <CaptureButton buttonDisabled={this.state.loading} onClick={() => { this.setModalVisible(!this.state.modalVisible)} }/>
+                <Modal
+                animationType="slide"
+                transparent={false}
+                visible={this.state.modalVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                }}></Modal>
             </RNCamera>
 		);
 	}

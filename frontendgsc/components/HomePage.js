@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import Camera from './Camera'
 
 const HomePage = (props) => {
-    // process.nextTick = setImmediate;
+    process.nextTick = setImmediate;
     return (
         <View style={styles.container}>
             <Camera/>
