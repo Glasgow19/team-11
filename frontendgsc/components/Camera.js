@@ -1,7 +1,8 @@
 import React from 'react';
-import { Modal,Dimensions, Alert, StyleSheet, ActivityIndicator } from 'react-native';
+import { Dimensions, Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import CaptureButton from './CaptureButton.js'
+import CaptureButton from './CaptureButton.js';
+
 
 export default class Camera extends React.Component {
 
@@ -10,88 +11,43 @@ export default class Camera extends React.Component {
         this.state = { 
 			identifedAs: '',
             loading: false,
-            modalVisible: false
-		}
-    }
-
-    setModalVisible(visible) {
-        this.setState({modalVisible: visible});
-    }
-    takePicture = async function(){
-		
-		if (this.camera) {
-
-			// Pause the camera's preview
-			this.camera.pausePreview();
-            
-            // Set the activity indicator
-			this.setState((previousState, props) => ({
-				loading: true
-			}));
-			
-			// Set options
-			const options = {
-                base64: true
-            };
-			
-			// Get the base64 version of the image
-			// const data = await this.camera.takePictureAsync(options)
-			
-			// Get the identified image
-			// this.identifyImage(data.base64);
 		}
 	}
 
-	// identifyImage(imageData){
+	componentDidMount() {
+		this.cameraInterval = setInterval(() => {
+			this.takeFrame();
+		}, 333);
+	}
 
-	// 	// Initialise Clarifai api
-	// 	const Clarifai = require('clarifai');
+	componentWillUnmount() {
+		clearInterval(this.cameraInterval);
+	}	
 
-	// 	const app = new Clarifai.App({
-	// 		apiKey: 'Your API key'
-	// 	});
+    takeFrame = async function(){
+		
+		if (this.camera) {
+			// Set options
+			const options = {
+				base64: true,
+            };
+			
+			// Get the base64 version of the image
+			const data = await this.camera.takePictureAsync(options)
 
-	// 	// Identify the image
-	// 	app.models.predict(Clarifai.GENERAL_MODEL, {base64: imageData})
-	// 		.then((response) => this.displayAnswer(response.outputs[0].data.concepts[0].name)
-	// 		.catch((err) => alert(err))
-	// 	);
-	// }
-
-	// displayAnswer(identifiedImage){
-
-	// 	// Dismiss the acitivty indicator
-	// 	this.setState((prevState, props) => ({
-	// 		identifedAs:identifiedImage,
-	// 		loading:false
-	// 	}));
-
-	// 	// Show an alert with the answer on
-	// 	Alert.alert(
-	// 		this.state.identifedAs,
-	// 		'',
-	// 		{ cancelable: false }
-	// 	  )
-
-	// 	// Resume the preview
-	// 	this.camera.resumePreview();
-	// }
+			//POST the frame
+			//this.sendFrame(data.base64);
+		}
+	}
     
 	render() {
 		return (
             <RNCamera ref={ref => {this.camera = ref;}} style={styles.preview}>
-            <ActivityIndicator size="large" style={styles.loadingIndicator} color="#fff" animating={this.state.loading}/>
-                <CaptureButton buttonDisabled={this.state.loading} onClick={() => { this.setModalVisible(!this.state.modalVisible)} }/>
-                <Modal
-                animationType="slide"
-                transparent={false}
-                visible={this.state.modalVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                }}></Modal>
             </RNCamera>
 		);
 	}
+	
+	//<CaptureButton buttonDisabled={this.state.loading} onClick={this.takeFrame.bind(this)}/>
 }
 
 const styles = StyleSheet.create({
