@@ -162,7 +162,10 @@ def describe(img_width, img_height, data):
 
 
 if __name__ == '__main__':
-    server_port = int(sys.argv[1])
+    try:
+        server_port = int(sys.argv[1])
+    except Exception:
+        server_port = 8080
     run()
     if not os.path.isdir('saved_images'):
         os.mkdir('saved_images')
