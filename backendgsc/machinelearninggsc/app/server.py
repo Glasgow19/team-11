@@ -40,6 +40,11 @@ def run_query(query):
             req.status_code, query))
 
 
+@app.route('/', methods=['GET'])
+def index():
+    return "Of course hello world!"
+
+
 @app.route('/try', methods=['GET'])
 def try_something():
     print("HI")
@@ -170,4 +175,4 @@ if __name__ == '__main__':
     run()
     if not os.path.isdir('saved_images'):
         os.mkdir('saved_images')
-    app.run(debug=True, port=8080)
+    app.run(host="0.0.0.0", port=80)
