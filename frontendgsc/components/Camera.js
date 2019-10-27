@@ -16,7 +16,6 @@ export default class Camera extends React.Component {
 			tipVisible: true,
 			modalText: 'Hello and welcome to the Glasgow Science Centre! Please keep your mobile phone pointed forwards during your visit, this will enable us to share with you useful exhibit or visitor information which will be read back and displayed to you here.'
 		}
-		console.log(this.props);
 		this.onClickToHelp = this.onClickToHelp.bind(this);
 	}
 
@@ -28,31 +27,14 @@ export default class Camera extends React.Component {
 		this.setState({modalVisible: visible});
 	}
 	componentDidMount() {
-		this.cameraInterval = setInterval(async () => {
+		// this.cameraInterval = setInterval(async () => {
 		this.takeFrame();
-		// 	// this.takeScreenShot();
-		 }, 1500);
+		//  }, 1500);
 	}
 
 	componentWillUnmount() {
-		clearInterval(this.cameraInterval);
+		// clearInterval(this.cameraInterval);
 	}	
-
-	takeScreenShot= async ()=>{
-		//handler to take screnshot
-		// const data = await captureScreen({
-		//   //either png or jpg or webm (Android). Defaults to png
-		//   format: "png",
-		//   quality: 0.2,
-		//   result: 'base64'
-		// })
-		// .then(
-		//   //callback function to get the result URL of the screnshot
-		//   result => data
-		//   //uri => this.setState({ imageURI : uri }),
-		// )
-		//   ;
-	  }
 
     takeFrame = async function(){
 		
@@ -67,25 +49,32 @@ export default class Camera extends React.Component {
 				const data = await this.camera.takePictureAsync(options)
 	
 				//POST the frame
-				let response = await fetch('http://178.62.19.14/image', {
-					method: 'POST',
-					headers: {
-					  Accept: 'application/json',
-					  'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-					  image: data.base64,
-					}),
-				  });
-				  let responseJson = await response.json();
-				  if (responseJson.response == ''){
-					console.log('No response!');
-				  }else{
-					this.setState({modalText: responseJson.response});
-				  }
-				}catch {
-					console.log('Server error!');
+				try {
+					let response = await fetch('http://178.62.19.14/image', {
+						method: 'POST',
+						headers: {
+						  Accept: 'application/json',
+						  'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+						  image: data.base64,
+						}),
+					  });
+					  let responseJson = await response.json();
+					  if (responseJson.response == ''){
+						console.log('No response!');
+					  }else{
+						this.setState({modalText: responseJson.response});
+					  }
+				} catch {
+					console.log("Fetch request failed.")
 				}
+			} catch {
+				console.log('Server error!');
+			}
+			setTimeout(async () => {
+				this.takeFrame();
+			}, 1000);
 		}
 	}
     
