@@ -35,14 +35,24 @@ def predict(img="./data/meme.jpg"):
     logging.info('time: {}'.format(t2 - t1))
 
     logging.info('detections:')
+    detections = []
+    wh = np.flip(img.shape[0:2])
     for i in range(nums[0]):
-        logging.info('\t{}, {}, {}'.format(class_names[int(classes[0][i])],
-                                           np.array(scores[0][i]),
-                                           np.array(boxes[0][i])))
-
+        x1y1 = tuple((np.array(boxes[0][i][0:2]) * wh).astype(np.int32))
+        x2y2 = tuple((np.array(boxes[0][i][2:4]) * wh).astype(np.int32))
+        detection = dict(
+            className=class_names[int(classes[0][i])],
+            score=np.array(scores[0][i]),
+            topLeft=x1y1,
+            bottomLeft=x2y2,
+        )
+        detections.append(detection)
+        # logging.info('\t{}, {}, {}'.format(class_names[int(classes[0][i])],
+        #                                    np.array(scores[0][i]),
+        #                                    np.array(boxes[0][i])))
+    print(detections)
     # img = cv2.imread(FLAGS.image)
     # img = draw_outputs(img, (boxes, scores, classes, nums), class_names)
-    print(boxes, scores, classes, nums)
     # cv2.imwrite(FLAGS.output, img)
 
 
@@ -58,6 +68,7 @@ def main(args):
     logging.info('classes loaded')
 
     logging.info('output saved to: {}'.format(FLAGS.output))
+    predict()
 
 
 def run():
