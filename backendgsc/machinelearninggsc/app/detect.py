@@ -18,18 +18,14 @@ flags.DEFINE_integer('size', 416, 'resize images to')
 flags.DEFINE_string('image', './data/girl.png', 'path to input image')
 flags.DEFINE_string('output', './output.jpg', 'path to output image')
 flags.DEFINE_integer('num_classes', 80, 'number of classes in the model')
+yolo = None
+class_names = None
 
 
-def main():
-    yolo = YoloV3(classes=FLAGS.num_classes)
-
-    yolo.load_weights(FLAGS.weights)
-    logging.info('weights loaded')
-
-    class_names = [c.strip() for c in open(FLAGS.classes).readlines()]
-    logging.info('classes loaded')
-
-    img = tf.image.decode_image(open(FLAGS.image, 'rb').read(), channels=3)
+def predict(img="./data/meme.jpg"):
+    global yolo
+    global class_names
+    img = tf.image.decode_image(open(img, 'rb').read(), channels=3)
     img = tf.expand_dims(img, 0)
     img = transform_images(img, FLAGS.size)
 
@@ -44,9 +40,23 @@ def main():
                                            np.array(scores[0][i]),
                                            np.array(boxes[0][i])))
 
-    img = cv2.imread(FLAGS.image)
-    img = draw_outputs(img, (boxes, scores, classes, nums), class_names)
-    cv2.imwrite(FLAGS.output, img)
+    # img = cv2.imread(FLAGS.image)
+    # img = draw_outputs(img, (boxes, scores, classes, nums), class_names)
+    print(boxes, scores, classes, nums)
+    # cv2.imwrite(FLAGS.output, img)
+
+
+def main(args):
+    global yolo
+    global class_names
+    yolo = YoloV3(classes=FLAGS.num_classes)
+
+    yolo.load_weights(FLAGS.weights)
+    logging.info('weights loaded')
+
+    class_names = [c.strip() for c in open(FLAGS.classes).readlines()]
+    logging.info('classes loaded')
+
     logging.info('output saved to: {}'.format(FLAGS.output))
 
 
