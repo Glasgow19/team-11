@@ -7,7 +7,8 @@ import requests
 from datetime import datetime
 from detect import run, predict
 from flask import jsonify
-
+from io import BytesIO
+import base64
 
 app = Flask(__name__)
 
@@ -48,7 +49,7 @@ def index():
 @app.route('/try', methods=['GET'])
 def try_something():
     print("HI")
-    predict("./data/meme.jpg")
+    # predict("./data/meme.jpg")
     return Response('save fail\n', 500)
 
 
@@ -68,12 +69,11 @@ def image():
         return
     #     save image to local dir. assume jpg as phones capture jpg
     data = request.get_json()
-    img = data['image']
     try:
         # todo: convert to base64
-        print(img)
-        #pil_img = Image.open(img)
-        #pil_img.save('saved_images/' + str(uuid4()) + '.jpg')
+        img = data['image']
+        img = Image.open(BytesIO(base64.b64decode(img)))
+        predict(img, is_file=True)
         return Response('save success\n', 200)
     except Exception as e:
         return Response('save fail\n', 500)
