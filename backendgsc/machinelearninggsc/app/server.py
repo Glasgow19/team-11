@@ -72,7 +72,7 @@ def image():
         # todo: convert to base64
         pil_img = Image.open(img)
         print(pil_img)
-        # pil_img.save('saved_images/' + str(uuid4()) + '.jpg')
+        pil_img.save('saved_images/' + str(uuid4()) + '.jpg')
         return Response('save success\n', 200)
     except Exception as e:
         return Response('save fail\n', 500)
