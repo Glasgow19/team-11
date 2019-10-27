@@ -46,7 +46,8 @@ const Animation = (props) => {
     
     setInterval(() => {
         animate()
-    }, 10000);
+    }, 40000);
+
     return (
         <Animated.View style={[styles.container, translateStyle]}>
             <LeftArrow></LeftArrow>

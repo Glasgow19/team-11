@@ -40,6 +40,8 @@ target 'frontendgsc' do
 
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
+  pod 'react-native-view-shot', :path => '../node_modules/react-native-view-shot'
+
   target 'frontendgscTests' do
     inherit! :search_paths
     # Pods for testing
