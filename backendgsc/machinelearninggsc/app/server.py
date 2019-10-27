@@ -173,7 +173,7 @@ def describe():
 
 
 if __name__ == '__main__':
-    # run()
+    run()
     if not os.path.isdir('saved_images'):
         os.mkdir('saved_images')
     app.run(host="0.0.0.0", port=80)
