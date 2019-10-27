@@ -4,30 +4,14 @@ import { View,TouchableOpacity, Text,StyleSheet} from 'react-native';
 import posed from 'react-native-pose';
 import Box from "./box";
 
-// import Svg, {
-//     Circle,
-//     Ellipse,
-//     G,
-//     Text,
-//     TSpan,
-//     TextPath,
-//     Path,
-//     Polygon,
-//     Polyline,
-//     Line,
-//     Rect,
-//     Use,
-//     Image,
-//     Symbol,
-//     Defs,
-//     LinearGradient,
-//     RadialGradient,
-//     Stop,
-//     ClipPath,
-//     Pattern,
-//     Mask,
-//     Marker
-//   } from 'react-native-svg';
+import Svg, {Path, Rect,Defs, Marker } from 'react-native-svg'; //add Box
+import { Left } from 'native-base';
+import {
+    // previously imported modules
+    Animated, // provides methods for animating components
+    Easing ,
+    Dimensions// for implementing easing functions
+  } from "react-native";
 
   const styles = StyleSheet.create({
     container: {
@@ -39,19 +23,47 @@ import Box from "./box";
   });
 const Animation = (props) => {
     var [isVisible, setVisibility] = useState(false);
+    var yTranslate = new Animated.Value(0);
+    var {width, height} = Dimensions.get('window')
+    var negativeHeight = -height + 20;
+
+    var modalMoveY = yTranslate.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, negativeHeight]
+      });
+    var translateStyle = { transform: [{ translateY: modalMoveY }] }; // translateY is the transform for moving objects vertically 
+    var [value, setValue] = useState(1);
+    
+    const animate = ()=> {
+        console.log("hey");
+        setValue(value+10);
+        Animated.timing(yTranslate, {
+            toValue: 10,
+            duration: 200,
+            easing: Easing.linear
+          }).start();
+    }
+    
+    setInterval(() => {
+        animate()
+    }, 10000);
     return (
-        <View style={styles.container}>
-                <Box isVisible={isVisible} />
-                <TouchableOpacity
-                onPress={() => {
-                    setVisibility(!isVisible)
-                }}
-                >
-                <Text>Show Box</Text>
-                </TouchableOpacity>
-        </View>
+        <Animated.View style={[styles.container, translateStyle]}>
+            <LeftArrow></LeftArrow>
+        </Animated.View>
+        // <View style={styles.container}>
+        //         <LeftArrow isVisible={isVisible} />
+        //         <TouchableOpacity
+        //         onPress={() => {
+        //             setVisibility(!isVisible)
+        //         }}
+        //         >
+        //         <Text>Show Box</Text>
+        //         </TouchableOpacity>
+        // </View>
         );
 }
+
 const LeftArrow = (props) => {
     const Box = posed.View({
         visible: { opacity: 1 },
@@ -59,10 +71,6 @@ const LeftArrow = (props) => {
       });
     const isVisible = true;
     return (
-        <View style= {{ flex:1,backgroundColor:"#131313"}}>
-            {/* { isVisible }) => ( */}
-                <Box pose={isVisible ? 'visible' : 'hidden'} />
-            {/* } */}
             <Svg width="400" height="200" viewBox="0 0 4000 2000">
                 <Defs>
                     <Marker
@@ -98,7 +106,7 @@ const LeftArrow = (props) => {
                 />
             </Svg>
 
-        </View>
+        // </View>
     )
 }
 

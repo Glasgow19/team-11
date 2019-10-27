@@ -9,7 +9,10 @@ const Box = posed.View({
 
 export default ({ isVisible }) => (
   <Box
-    style={{ width: 100, height: 100, backgroundColor: "red" }}
+    style={{ width: 300, height: 50, backgroundColor: "red"}}
     pose={isVisible ? "visible" : "hidden"}
   />
+  
 );
+
+
