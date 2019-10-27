@@ -1,11 +1,14 @@
 absl-py==0.8.1
 astor==0.8.0
+certifi==2019.9.11
+chardet==3.0.4
 Click==7.0
 Flask==1.1.1
 gast==0.2.2
 google-pasta==0.1.7
 grpcio==1.24.3
 h5py==2.10.0
+idna==2.8
 itsdangerous==1.1.0
 Jinja2==2.10.3
 Keras-Applications==1.0.8
@@ -17,10 +20,12 @@ opencv-python==4.1.1.26
 opt-einsum==3.1.0
 Pillow==6.2.1
 protobuf==3.10.0
+requests==2.22.0
 six==1.12.0
 tensorboard==2.0.0
 tensorflow==2.0.0
 tensorflow-estimator==2.0.1
 termcolor==1.1.0
+urllib3==1.25.6
 Werkzeug==0.16.0
 wrapt==1.11.2
