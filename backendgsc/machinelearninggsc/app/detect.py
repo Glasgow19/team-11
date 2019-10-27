@@ -51,7 +51,7 @@ def predict(img="./data/meme.jpg", is_file=False):
             className=class_names[int(classes[0][i])],
             score=float(score),
             topLeft=x1y1,
-            bottomLeft=x2y2,
+            bottomRight=x2y2,
         )
         detections.append(detection)
         # logging.info('\t{}, {}, {}'.format(class_names[int(classes[0][i])],

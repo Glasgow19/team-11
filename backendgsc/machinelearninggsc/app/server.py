@@ -127,55 +127,33 @@ def get_planeteriums_events():
 # find out in which section of the image is the item in
 def describe(img_width, img_height, data):
     response = ""
+    half_height = img_height / 2
+    half_width = img_width / 2
     for item in data:
-        name = item['name']
+        name = item['className']
         if name == "person":
             name = "Planetarium"
-
-        half_height = img_height / 2
-        half_width = img_width / 2
+        resp = {}
         # [x, y]
-        top_left = item['topLeft']
-        top_right = item['topRight']
-        bottom_left = item['bottomLeft']
-        bottom_right = item['bottomRight']
+        top_left, top_right = item['topLeft']
+        bottom_left, bottom_right = item['bottomRight']
         return_string = 'There is {} in your {}.'
 
-        # rip these if statements. very rudimentary way to find out in which quadrant the object is in
-        if bottom_right[0] < half_width and bottom_right[1] < half_height:
-            # completely top left as furthest down coordinate is before 0,0 in coordinate plane
-            resp[name] = {'text': return_string.format(
-                name, 'top left'), 'dir': 'left'}
-        elif bottom_left[0] >= half_width and bottom_left[1] <= half_height:
-            # completely top right as furthest down coordinate is after 0,0
-            resp[name] = {'text': return_string.format(
-                name, 'top right'), 'dir': 'right'}
-        elif top_left[0] >= half_width and top_left[1] >= half_height:
-            # completely bottom right
-            resp[name] = {'text': return_string.format(
-                name, 'bottom right'), 'dir': 'right'}
-        elif top_right[0] < half_width and top_right[1] >= half_height:
-            resp[name] = {'text': return_string.format(
-                name, 'bottom left'), 'dir': 'left'}
-        # now to check for intersecting quadrants
+        if top_left < half_width and bottom_left < half_width:
+            response += return_string.format(name, "left side.")
+        elif top_right > half_width and bottom_right > half_width:
+            response += return_string.format(name, "right side.")
+        else:
+            response + return_string.format(name, "center.")
 
-        if bottom_right[0] < half_width or top_right[0] < half_width:
-            resp[name] = {'text': return_string.format(
-                name, 'left'), 'dir': 'left'}
-        elif bottom_left[0] >= half_width or top_left[0] >= half_width:
-            resp[name] = {'text': return_string.format(
-                name, 'right'), 'dir': 'right'}
-
-        response += resp[name]['text']
-        if name == "Planeteriun":
+        if name == "Planetarium":
             description = get_planeteriums_events()
             response += " "+description
     return response
 
 
 if __name__ == '__main__':
-    print(get_planeteriums_events())
-    # run()
-    # if not os.path.isdir('saved_images'):
-    #     os.mkdir('saved_images')
-    # app.run(host="0.0.0.0", port=80)
+    run()
+    if not os.path.isdir('saved_images'):
+        os.mkdir('saved_images')
+    app.run(host="0.0.0.0", port=80)
