@@ -74,7 +74,7 @@ def image():
         return
     #     save image to local dir. assume jpg as phones capture jpg
     new_time = time.time()
-    if new_time - global_time > 5:
+    if (new_time - global_time) > 3:
         data = request.get_json()
         img = data['image']
         img = base64.b64decode(img)
