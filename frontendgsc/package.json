@@ -24,7 +24,6 @@
     "react-native-swipe-gestures": "^1.0.4",
     "react-native-tts": "^3.0.0",
     "react-native-typography": "^1.4.1",
-    "react-native-view-shot": "^3.0.2",
     "react-navigation": "^4.0.10",
     "react-navigation-stack": "^1.10.3"
   },
