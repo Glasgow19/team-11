@@ -164,4 +164,4 @@ if __name__ == '__main__':
     run()
     if not os.path.isdir('saved_images'):
         os.mkdir('saved_images')
-    app.run(host="0.0.0.0", port=80)
+    app.run(debug=True, host="0.0.0.0")
