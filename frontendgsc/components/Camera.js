@@ -17,6 +17,7 @@ export default class Camera extends React.Component {
 			modalText: 'Hello and welcome to the Glasgow Science Centre! Please keep your mobile phone pointed forwards during your visit, this will enable us to share with you useful exhibit or visitor information which will be read back and displayed to you here.'
 		}
 		this.onClickToHelp = this.onClickToHelp.bind(this);
+		this.runAgain = this.runAgain.bind(this);
 	}
 
 	onClickToHelp() {
@@ -27,8 +28,10 @@ export default class Camera extends React.Component {
 		this.setState({modalVisible: visible});
 	}
 	componentDidMount() {
+		setTimeout(() => {
+			this.takeFrame();
+		}, 12000);
 		// this.cameraInterval = setInterval(async () => {
-		this.takeFrame();
 		//  }, 1500);
 	}
 
@@ -47,7 +50,7 @@ export default class Camera extends React.Component {
 			try{
 			// Get the base64 version of the image
 				const data = await this.camera.takePictureAsync(options)
-	
+				let failed = true;
 				//POST the frame
 				try {
 					let response = await fetch('http://178.62.19.14/image', {
@@ -64,7 +67,17 @@ export default class Camera extends React.Component {
 					  if (responseJson.response == ''){
 						console.log('No response!');
 					  }else{
-						this.setState({modalText: responseJson.response});
+						failed = false;
+						this.setState({
+							tipVisible: false,
+							modalText: responseJson.response
+						}, () => {
+							this.setState({
+								tipVisible: true,
+							}, () => {
+								this.runAgain();
+							});
+						});
 					  }
 				} catch {
 					console.log("Fetch request failed.")
@@ -72,10 +85,16 @@ export default class Camera extends React.Component {
 			} catch {
 				console.log('Server error!');
 			}
-			setTimeout(async () => {
-				this.takeFrame();
-			}, 1000);
+			if (failed) {
+				this.runAgain();
+			}
 		}
+	}
+
+	runAgain() {
+		setTimeout(() => {
+			this.takeFrame();
+		}, 1000);
 	}
     
 	render() {
@@ -139,7 +158,7 @@ const Tip = (props) => {
 			setSaidOnce(true);	
 			Vibration.vibrate(1000);		
 		}
-	  });
+	  }, [ saidOnce ]);
 	return(
 		<Text style={{fontSize: 20, fontWeight: 'bold',color:"#F1F1F1", backgroundColor:"#131313",marginHorizontal:80,
 			marginVertical:10,borderRadius:5,textAlignVertical:"center",
