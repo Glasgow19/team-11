@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Dimensions, StyleSheet, View, Text} from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import CaptureButton from './CaptureButton.js';
@@ -82,12 +82,7 @@ export default class Camera extends React.Component {
             <RNCamera ref={ref => {this.camera = ref;}} style={styles.preview}>
 				<View style = {{flex:2,justifyContent:"flex-end",flexDirection:"column"}} >
 						{this.state.tipVisible ?
-						<Text style={{fontSize: 20, fontWeight: 'bold',color:"#F1F1F1", backgroundColor:"#131313",marginHorizontal:80,
-						marginVertical:10,borderRadius:5,textAlignVertical:"center",
-						textAlign:"center",paddingHorizontal:10,paddingVertical:10}}>
-							Team 11 is the best 
-						</Text>
-						
+							<Tip text = "Hey Hemang!"></Tip>
 						: null}
 						<Button
 							style={{
@@ -125,3 +120,15 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	}
 });
+const Tip = (props) => {
+	useEffect(() => {
+		Tts.speak(props.text)
+	  });
+	return(
+		<Text style={{fontSize: 20, fontWeight: 'bold',color:"#F1F1F1", backgroundColor:"#131313",marginHorizontal:80,
+			marginVertical:10,borderRadius:5,textAlignVertical:"center",
+			textAlign:"center",paddingHorizontal:10,paddingVertical:10}}>
+				{props.text}
+		</Text>	
+	)
+}
