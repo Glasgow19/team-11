@@ -7,7 +7,6 @@ import {Button} from 'native-base';
 import Tts from 'react-native-tts';
 
 export default class Camera extends React.Component {
-
 	constructor(props){
 		super(props);
         this.state = {
@@ -15,16 +14,24 @@ export default class Camera extends React.Component {
 			identifedAs: '',
 			loading: false,
 			tipVisible: true,
+			modalText: 'Hello and welcome to the Glasgow Science Centre! Please keep your mobile phone pointed forwards during your visit, this will enable us to share with you useful exhibit or visitor information which will be read back and displayed to you here.'
 		}
+		console.log(this.props);
+		this.onClickToHelp = this.onClickToHelp.bind(this);
 	}
+
+	onClickToHelp() {
+		this.props.navigation.navigate("InformationPage");
+	}
+
 	setModalVisible(visible) {
 		this.setState({modalVisible: visible});
 	}
 	componentDidMount() {
-		this.cameraInterval = setInterval(async () => {
-			this.takeFrame();
-			// this.takeScreenShot();
-		}, 1500);
+		// this.cameraInterval = setInterval(async () => {
+		// 	this.takeFrame();
+		// 	// this.takeScreenShot();
+		// }, 1500);
 	}
 
 	componentWillUnmount() {
@@ -55,12 +62,12 @@ export default class Camera extends React.Component {
 				base64: true,
             };
 			
+			try{
 			// Get the base64 version of the image
-			try {
 				const data = await this.camera.takePictureAsync(options)
 	
 				//POST the frame
-				fetch('http://178.62.19.14/image', {
+				let response = await fetch('http://178.62.19.14/image', {
 					method: 'POST',
 					headers: {
 					  Accept: 'application/json',
@@ -70,22 +77,28 @@ export default class Camera extends React.Component {
 					  image: data.base64,
 					}),
 				  });
-			} catch {
-				console.log("Whoops! Server down! My bad.");
-			}
+				  let responseJson = await response.json();
+				  if (responseJson.response == ''){
+					console.log('No response!');
+				  }else{
+					this.setState({modalText: responseJson.response});
+				  }
+				}catch {
+					console.log('Server error!');
+				}
 		}
 	}
     
 	render() {
 		setInterval( () => {
 			this.setModalVisible(!this.state.modalVisible)
-		}, 8000);
+		}, 60000);
 		return (
 			<>
             <RNCamera ref={ref => {this.camera = ref;}} style={styles.preview}>
 				<View style = {{flex:2,justifyContent:"flex-end",flexDirection:"column"}} >
 						{this.state.tipVisible ?
-							<Tip text = "Hey Hemang!"></Tip>
+							<Tip text = {this.state.modalText}></Tip>
 						: null}
 						<Button
 							style={{
@@ -97,7 +110,7 @@ export default class Camera extends React.Component {
 							width: 500,
 							height: 50,
 							}}
-							onPress = { ()=>{props.navigation.navigate('HomePage')}}>
+							onPress = { this.onClickToHelp }>
 							<Text style={{fontSize: 25, fontWeight: 'bold'}}>Help</Text>
 						</Button>
 				</View>
@@ -105,8 +118,6 @@ export default class Camera extends React.Component {
 			</>
 		);
 	}
-	
-	//<CaptureButton buttonDisabled={this.state.loading} onClick={this.takeFrame.bind(this)}/>
 }
 
 const styles = StyleSheet.create({
