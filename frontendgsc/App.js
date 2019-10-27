@@ -8,6 +8,7 @@ import LoginPage from './components/LoginPage';
 import HomePage from './components/HomePage';
 import LanguagePage from './components/LanguagePage';
 import SplashScreen from './components/SplashScreen';
+import Animation from './components/LeftArrow';
 
 console.disableYellowBox = true;
 
@@ -15,9 +16,10 @@ const AppNavigator = createStackNavigator({
   LoginPage,
   HomePage,
   LanguagePage,
-  SplashScreen
+  SplashScreen,
+  Animation
 }, {
-  initialRouteName: 'SplashScreen',
+  initialRouteName: 'Animation',
   headerMode: 'none',
   navigationOptions: {
     headerVisible: false,
