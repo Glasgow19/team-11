@@ -140,11 +140,11 @@ def describe(img_width, img_height, data):
         return_string = 'There is {} in your {}.'
 
         if top_left < half_width and bottom_left < half_width:
-            response += return_string.format(name, "left side.")
+            response += return_string.format(name, "left side")
         elif top_right > half_width and bottom_right > half_width:
-            response += return_string.format(name, "right side.")
+            response += return_string.format(name, "right side")
         else:
-            response + return_string.format(name, "center.")
+            response + return_string.format(name, "center")
 
         if name == "Planetarium":
             description = get_planeteriums_events()
