@@ -9,11 +9,14 @@ from detect import run, predict
 from flask import jsonify
 from io import BytesIO
 import base64
+import time
 
 app = Flask(__name__)
-
+global_time = time.time()
 
 # standard distance between 2 points on a straight line
+
+
 def get_distance(x0, y0, x1, y1):
     return hypot(x1 - x0, y1 - y0)
 
@@ -65,18 +68,23 @@ def exhibition_info():
 
 @app.route('/image', methods=['GET', 'POST'])
 def image():
+    global global_time
     if request.method == 'GET':
         return
     #     save image to local dir. assume jpg as phones capture jpg
-    data = request.get_json()
-    img = data['image']
-    img = base64.b64decode(img)
-    wh, detections = predict(img, is_file=True)
-    print(describe(wh[0], wh[1], detections))
-    return Response('save success\n', 200)
-
+    new_time = time.time()
+    if new_time - global_time > 5:
+        data = request.get_json()
+        img = data['image']
+        img = base64.b64decode(img)
+        wh, detections = predict(img, is_file=True)
+        global_time = new_time
+        return jsonify({"response": describe(wh[0], wh[1], detections)})
+    return Response("Status: Too many requests...")
 
 # @app.route('/data', methods=['GET'])
+
+
 def get_planeteriums_events():
     query = """
     {

@@ -37,7 +37,7 @@ def predict(img="./data/meme.jpg", is_file=False):
     t2 = time.time()
     logging.info('time: {}'.format(t2 - t1))
 
-    logging.info('detections:')
+    # logging.info('detections:')
     detections = []
     wh = np.flip(img.shape[1:3])
     for i in range(nums[0]):
