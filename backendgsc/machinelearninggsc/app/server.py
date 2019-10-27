@@ -6,6 +6,8 @@ import os
 import requests
 from datetime import datetime
 from detect import run, predict
+from flask import jsonify
+
 
 app = Flask(__name__)
 
@@ -38,6 +40,11 @@ def run_query(query):
             req.status_code, query))
 
 
+@app.route('/', methods=['GET'])
+def index():
+    return "Of course hello world!"
+
+
 @app.route('/try', methods=['GET'])
 def try_something():
     print("HI")
@@ -64,7 +71,8 @@ def image():
     try:
         # todo: convert to base64
         pil_img = Image.open(img)
-        pil_img.save('saved_images/' + str(uuid4()) + '.jpg')
+        print(pil_img)
+        # pil_img.save('saved_images/' + str(uuid4()) + '.jpg')
         return Response('save success\n', 200)
     except Exception as e:
         return Response('save fail\n', 500)
@@ -167,4 +175,4 @@ if __name__ == '__main__':
     run()
     if not os.path.isdir('saved_images'):
         os.mkdir('saved_images')
-    app.run(debug=True, port=8080)
+    app.run(host="0.0.0.0", port=80)
