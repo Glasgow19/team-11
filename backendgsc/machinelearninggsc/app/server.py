@@ -5,6 +5,7 @@ from uuid import uuid4
 import os
 import requests
 from datetime import datetime
+from detect import run, predict
 
 app = Flask(__name__)
 
@@ -25,13 +26,23 @@ def in_center(tl, tr, bl, br, h, w):
     return False
 
 
-def run_query(query):  # A simple function to use requests.post to make the API call. Note the json= section.
+# A simple function to use requests.post to make the API call. Note the json= section.
+def run_query(query):
     headers = {"Authorization": "Bearer YOUR API KEY"}
-    req = requests.post('https://gammaql.gsc.org.uk/', json={'query': query}, headers=headers)
+    req = requests.post('https://gammaql.gsc.org.uk/',
+                        json={'query': query}, headers=headers)
     if req.status_code == 200:
         return req.json()
     else:
-        raise Exception("Query failed to run by returning code of {}. {}".format(req.status_code, query))
+        raise Exception("Query failed to run by returning code of {}. {}".format(
+            req.status_code, query))
+
+
+@app.route('/try', methods=['GET'])
+def try_something():
+    print("HI")
+    predict("./data/meme.jpg")
+    return Response('save fail\n', 500)
 
 
 @app.route('/exhibition/info', methods=['GET', 'POST'])
@@ -127,26 +138,33 @@ def describe():
         # rip these if statements. very rudimentary way to find out in which quadrant the object is in
         if bottom_right[0] < half_width and bottom_right[1] < half_height:
             # completely top left as furthest down coordinate is before 0,0 in coordinate plane
-            resp[name] = {'text': return_string.format(name, 'top left'), 'dir': 'left'}
+            resp[name] = {'text': return_string.format(
+                name, 'top left'), 'dir': 'left'}
         elif bottom_left[0] >= half_width and bottom_left[1] <= half_height:
             # completely top right as furthest down coordinate is after 0,0
-            resp[name] = {'text': return_string.format(name, 'top right'), 'dir': 'right'}
+            resp[name] = {'text': return_string.format(
+                name, 'top right'), 'dir': 'right'}
         elif top_left[0] >= half_width and top_left[1] >= half_height:
             # completely bottom right
-            resp[name] = {'text': return_string.format(name, 'bottom right'), 'dir': 'right'}
+            resp[name] = {'text': return_string.format(
+                name, 'bottom right'), 'dir': 'right'}
         elif top_right[0] < half_width and top_right[1] >= half_height:
-            resp[name] = {'text': return_string.format(name, 'bottom left'), 'dir': 'left'}
+            resp[name] = {'text': return_string.format(
+                name, 'bottom left'), 'dir': 'left'}
         # now to check for intersecting quadrants
 
         if bottom_right[0] < half_width or top_right[0] < half_width:
-            resp[name] = {'text': return_string.format(name, 'left'), 'dir': 'left'}
+            resp[name] = {'text': return_string.format(
+                name, 'left'), 'dir': 'left'}
         elif bottom_left[0] >= half_width or top_left[0] >= half_width:
-            resp[name] = {'text': return_string.format(name, 'right'), 'dir': 'right'}
+            resp[name] = {'text': return_string.format(
+                name, 'right'), 'dir': 'right'}
 
     return resp
 
 
 if __name__ == '__main__':
+    run()
     if not os.path.isdir('saved_images'):
         os.mkdir('saved_images')
     app.run(debug=True, port=8080)
