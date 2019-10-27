@@ -7,7 +7,6 @@ import {Button} from 'native-base';
 import Tts from 'react-native-tts';
 
 export default class Camera extends React.Component {
-
 	constructor(props){
 		super(props);
         this.state = {
@@ -16,15 +15,22 @@ export default class Camera extends React.Component {
 			loading: false,
 			tipVisible: true,
 		}
+		console.log(this.props);
+		this.onClickToHelp = this.onClickToHelp.bind(this);
 	}
+
+	onClickToHelp() {
+		this.props.navigation.navigate("InformationPage");
+	}
+
 	setModalVisible(visible) {
 		this.setState({modalVisible: visible});
 	}
 	componentDidMount() {
-		this.cameraInterval = setInterval(async () => {
-			this.takeFrame();
-			// this.takeScreenShot();
-		}, 1500);
+		// this.cameraInterval = setInterval(async () => {
+		// 	this.takeFrame();
+		// 	// this.takeScreenShot();
+		// }, 1500);
 	}
 
 	componentWillUnmount() {
@@ -97,7 +103,7 @@ export default class Camera extends React.Component {
 							width: 500,
 							height: 50,
 							}}
-							onPress = { ()=>{props.navigation.navigate('HomePage')}}>
+							onPress = { this.onClickToHelp }>
 							<Text style={{fontSize: 25, fontWeight: 'bold'}}>Help</Text>
 						</Button>
 				</View>
@@ -105,8 +111,6 @@ export default class Camera extends React.Component {
 			</>
 		);
 	}
-	
-	//<CaptureButton buttonDisabled={this.state.loading} onClick={this.takeFrame.bind(this)}/>
 }
 
 const styles = StyleSheet.create({
