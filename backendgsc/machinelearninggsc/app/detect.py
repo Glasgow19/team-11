@@ -37,7 +37,7 @@ def predict(img="./data/meme.jpg", is_file=False):
     t2 = time.time()
     logging.info('time: {}'.format(t2 - t1))
 
-    logging.info('detections:')
+    # logging.info('detections:')
     detections = []
     wh = np.flip(img.shape[1:3])
     for i in range(nums[0]):
@@ -51,13 +51,13 @@ def predict(img="./data/meme.jpg", is_file=False):
             className=class_names[int(classes[0][i])],
             score=float(score),
             topLeft=x1y1,
-            bottomLeft=x2y2,
+            bottomRight=x2y2,
         )
         detections.append(detection)
         # logging.info('\t{}, {}, {}'.format(class_names[int(classes[0][i])],
         #                                    np.array(scores[0][i]),
         #                                    np.array(boxes[0][i])))
-    return detections
+    return wh, detections
     # img = cv2.imread(FLAGS.image)
     # img = draw_outputs(img, (boxes, scores, classes, nums), class_names)
     # cv2.imwrite(FLAGS.output, img)

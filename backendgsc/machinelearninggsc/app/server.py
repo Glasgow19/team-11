@@ -9,11 +9,14 @@ from detect import run, predict
 from flask import jsonify
 from io import BytesIO
 import base64
+import time
 
 app = Flask(__name__)
-
+global_time = time.time()
 
 # standard distance between 2 points on a straight line
+
+
 def get_distance(x0, y0, x1, y1):
     return hypot(x1 - x0, y1 - y0)
 
@@ -65,24 +68,24 @@ def exhibition_info():
 
 @app.route('/image', methods=['GET', 'POST'])
 def image():
+    global global_time
     if request.method == 'GET':
         return
     #     save image to local dir. assume jpg as phones capture jpg
-    data = request.get_json()
-    print("Request here")
-    #try:
-    # todo: convert to base64
-    img = data['image']
-    img = base64.b64decode(img)
-    print("Woah")
-    print(predict(img, is_file=True))
-    return Response('save success\n', 200)
-    #except Exception as e:
-    #return Response('save fail\n', 500)
+    new_time = time.time()
+    if new_time - global_time > 5:
+        data = request.get_json()
+        img = data['image']
+        img = base64.b64decode(img)
+        wh, detections = predict(img, is_file=True)
+        global_time = new_time
+        return jsonify({"response": describe(wh[0], wh[1], detections)})
+    return Response("Status: Too many requests...")
+
+# @app.route('/data', methods=['GET'])
 
 
-@app.route('/data', methods=['GET'])
-def data():
+def get_planeteriums_events():
     query = """
     {
         gammaEvents{
@@ -120,7 +123,8 @@ def data():
     for event in li:
         if event["ResDate"] == str(today) and event["Category"] == "Public" and event["Area"] == location:
             list_of_events.append(event["ResName"])
-    return jsonify({'response': list_of_events})
+
+    return "There are following events at Planetarium today: "+", ".join(list_of_events)+"."
 
 
 # list of objects
@@ -129,49 +133,31 @@ def data():
 #   topLeft, topRight, bottomLeft, bottomRight coordinates where item is located: [x, y]
 # ] imageWidth, imageHeight }
 # find out in which section of the image is the item in
-@app.route('/describe', methods=['POST'])
-def describe():
-    resp = dict()
-    req_data = request.get_json()
-    for item in req_data['data']:
-        name = item['name']
-        img_height = item['height']
-        img_width = item['width']
-        half_height = img_height / 2
-        half_width = img_width / 2
+def describe(img_width, img_height, data):
+    response = ""
+    half_height = img_height / 2
+    half_width = img_width / 2
+    for item in data:
+        name = item['className']
+        if name == "person":
+            name = "Planetarium"
+        resp = {}
         # [x, y]
-        top_left = item['topLeft']
-        top_right = item['topRight']
-        bottom_left = item['bottomLeft']
-        bottom_right = item['bottomRight']
+        top_left, top_right = item['topLeft']
+        bottom_left, bottom_right = item['bottomRight']
         return_string = 'There is {} in your {}.'
 
-        # rip these if statements. very rudimentary way to find out in which quadrant the object is in
-        if bottom_right[0] < half_width and bottom_right[1] < half_height:
-            # completely top left as furthest down coordinate is before 0,0 in coordinate plane
-            resp[name] = {'text': return_string.format(
-                name, 'top left'), 'dir': 'left'}
-        elif bottom_left[0] >= half_width and bottom_left[1] <= half_height:
-            # completely top right as furthest down coordinate is after 0,0
-            resp[name] = {'text': return_string.format(
-                name, 'top right'), 'dir': 'right'}
-        elif top_left[0] >= half_width and top_left[1] >= half_height:
-            # completely bottom right
-            resp[name] = {'text': return_string.format(
-                name, 'bottom right'), 'dir': 'right'}
-        elif top_right[0] < half_width and top_right[1] >= half_height:
-            resp[name] = {'text': return_string.format(
-                name, 'bottom left'), 'dir': 'left'}
-        # now to check for intersecting quadrants
+        if top_left < half_width and bottom_left < half_width:
+            response += return_string.format(name, "left side")
+        elif top_right > half_width and bottom_right > half_width:
+            response += return_string.format(name, "right side")
+        else:
+            response + return_string.format(name, "center")
 
-        if bottom_right[0] < half_width or top_right[0] < half_width:
-            resp[name] = {'text': return_string.format(
-                name, 'left'), 'dir': 'left'}
-        elif bottom_left[0] >= half_width or top_left[0] >= half_width:
-            resp[name] = {'text': return_string.format(
-                name, 'right'), 'dir': 'right'}
-
-    return resp
+        if name == "Planetarium":
+            description = get_planeteriums_events()
+            response += " "+description
+    return response
 
 
 if __name__ == '__main__':

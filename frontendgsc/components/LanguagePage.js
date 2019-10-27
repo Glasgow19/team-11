@@ -14,7 +14,7 @@ import Tts from 'react-native-tts';
 
 const LanguagePage = props => {
   Tts.setDefaultRate(0.6);
-  var languages = ['English', 'French', 'German', 'Spanish'];
+  var languages = ['English','Sign', 'French', 'German', 'Spanish'];
   var [position, setPosition] = useState(0);
   var [language, setLanguage] = useState(languages[position]);
 
@@ -30,6 +30,9 @@ const LanguagePage = props => {
     },
     spanish: {
       uri: require('../assets/spanish.png'),
+    },
+    sign: {
+      uri: require('../assets/sign.jpg'),
     },
   };
   const config = {
@@ -119,15 +122,25 @@ const LanguagePage = props => {
                 source={images[language.toLowerCase()].uri}
                 accessibilityLabel = {language}
               />
-              <Text
-                style={{
-                  color: '#F1F1F1',
-                  fontSize: 30,
-                  textAlign: 'center',
-                  fontFamily: 'Roboto Condensed',
-                }}>
-                {language}
-              </Text>
+              {language=="Sign"? 
+                  <Text
+                    style={{
+                      color: '#F1F1F1',
+                      fontSize: 30,
+                      textAlign: 'center',
+                      fontFamily: 'Roboto Condensed',
+                    }}> Sign language
+                  </Text>
+                :
+                <Text
+                    style={{
+                      color: '#F1F1F1',
+                      fontSize: 30,
+                      textAlign: 'center',
+                      fontFamily: 'Roboto Condensed',
+                    }}> {language}
+                  </Text>
+              }
             </CardItem>
           </Card>
         </GestureRecognizer>
