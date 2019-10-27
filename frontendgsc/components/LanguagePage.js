@@ -6,7 +6,7 @@ import {
   Image,
   UIManager,
   findNodeHandle,
-  TouchableOpacity,
+  Vibration
 } from 'react-native';
 import {Card, CardItem, Button} from 'native-base';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
@@ -36,6 +36,10 @@ const LanguagePage = props => {
     velocityThreshold: 0.01,
     directionalOffsetThreshold: 200,
   };
+  const DURATION = 1000 ;
+	const startVibration = () => {
+		Vibration.vibrate(DURATION) ;
+	}
   const onSwipeUp = gestureState => {
     if (position == languages.length - 1) {
       setPosition(0);
@@ -44,6 +48,7 @@ const LanguagePage = props => {
     }
     setLanguage(languages[position]);
     Tts.speak(languages[position]);
+    startVibration();
   };
 
   const onSwipeDown = gestureState => {
@@ -54,6 +59,7 @@ const LanguagePage = props => {
     }
     setLanguage(languages[position]);
     Tts.speak(languages[position]);
+    startVibration();
   };
   const readItOutLoud = () => {
     UIManager.sendAccessibilityEvent(

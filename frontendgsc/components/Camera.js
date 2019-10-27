@@ -1,5 +1,5 @@
 import React,{useEffect,useState} from 'react';
-import { Dimensions, StyleSheet, View, Text} from 'react-native';
+import { Dimensions, StyleSheet, View, Text,Vibration} from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import CaptureButton from './CaptureButton.js';
 import { captureScreen } from "react-native-view-shot";
@@ -122,10 +122,19 @@ const styles = StyleSheet.create({
 });
 const Tip = (props) => {
 	var [saidOnce, setSaidOnce]= useState(false);
+	const DURATION = 10000 ;
+	const PATTERN = [ 1000, 2000, 3000, 4000] ;
+	const startVibration = () => {
+		Vibration.vibrate(DURATION) ;
+	}
+	const stopVibration = () => {
+		Vibration.cancel();
+	}
 	useEffect(() => {
 		if (!saidOnce){
 			Tts.speak(props.text);
-			setSaidOnce(true);			
+			setSaidOnce(true);	
+			Vibration.vibrate(1000);		
 		}
 	  });
 	return(
