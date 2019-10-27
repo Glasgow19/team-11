@@ -91,15 +91,14 @@ def data():
     """
 
     result = run_query(query)  # Execute the query
-    list = result["data"]["gammaEvents"]
+    li = result["data"]["gammaEvents"]
     today = datetime.date(datetime.now())
     location = "Planetarium"
-    listOfEvents = []
-    for event in list:
-        if (event["ResDate"] == str(today) and event["Category"] == "Public" and event["Area"] == location):
-            # print(event["ResName"])
-            listOfEvents.append(event["ResName"])
-    return listOfEvents
+    list_of_events = list()
+    for event in li:
+        if event["ResDate"] == str(today) and event["Category"] == "Public" and event["Area"] == location:
+            list_of_events.append(event["ResName"])
+    return jsonify({'response': list_of_events})
 
 
 # list of objects
@@ -123,26 +122,26 @@ def describe():
         top_right = item['topRight']
         bottom_left = item['bottomLeft']
         bottom_right = item['bottomRight']
-        return_string = "There is {} in your {}."
+        return_string = 'There is {} in your {}.'
 
         # rip these if statements. very rudimentary way to find out in which quadrant the object is in
         if bottom_right[0] < half_width and bottom_right[1] < half_height:
             # completely top left as furthest down coordinate is before 0,0 in coordinate plane
-            resp[name] = return_string.format(name, 'top left')
+            resp[name] = {'text': return_string.format(name, 'top left'), 'dir': 'left'}
         elif bottom_left[0] >= half_width and bottom_left[1] <= half_height:
             # completely top right as furthest down coordinate is after 0,0
-            resp[name] = return_string.format(name, 'top right')
+            resp[name] = {'text': return_string.format(name, 'top right'), 'dir': 'right'}
         elif top_left[0] >= half_width and top_left[1] >= half_height:
             # completely bottom right
-            resp[name] = return_string.format(name, 'bottom right')
+            resp[name] = {'text': return_string.format(name, 'bottom right'), 'dir': 'right'}
         elif top_right[0] < half_width and top_right[1] >= half_height:
-            resp[name] = return_string.format(name, 'bottom left')
+            resp[name] = {'text': return_string.format(name, 'bottom left'), 'dir': 'left'}
         # now to check for intersecting quadrants
 
         if bottom_right[0] < half_width or top_right[0] < half_width:
-            resp[name] = return_string.format(name, 'left')
+            resp[name] = {'text': return_string.format(name, 'left'), 'dir': 'left'}
         elif bottom_left[0] >= half_width or top_left[0] >= half_width:
-            resp[name] = return_string.format(name, 'right')
+            resp[name] = {'text': return_string.format(name, 'right'), 'dir': 'right'}
 
     return resp
 
