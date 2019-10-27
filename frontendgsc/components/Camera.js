@@ -21,40 +21,40 @@ export default class Camera extends React.Component {
 		this.setState({modalVisible: visible});
 	}
 	componentDidMount() {
-		this.cameraInterval = setInterval(() => {
-			//this.takeFrame();
-			this.takeScreenShot;
-		}, 333);
+		this.cameraInterval = setInterval(async () => {
+			this.takeFrame();
+			// this.takeScreenShot();
+		}, 1500);
 	}
 
 	componentWillUnmount() {
 		clearInterval(this.cameraInterval);
 	}	
 
-	takeScreenShot=()=>{
+	takeScreenShot= async ()=>{
 		//handler to take screnshot
-		captureScreen({
-		  //either png or jpg or webm (Android). Defaults to png
-		  format: "png",
-		  quality: 0.5,
-		  result: 'base64'
-		})
-		.then(
-		  //callback function to get the result URL of the screnshot
-		  result => data
-		  //uri => this.setState({ imageURI : uri }),
-		)
-		fetch('', {
-			method: 'POST',
-			headers: {
-			  Accept: 'application/json',
-			  'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-			  frameBase: data,
-			}),
-		  });
-		  ;
+		// const data = await captureScreen({
+		//   //either png or jpg or webm (Android). Defaults to png
+		//   format: "png",
+		//   quality: 0.2,
+		//   result: 'base64'
+		// })
+		// .then(
+		//   //callback function to get the result URL of the screnshot
+		//   result => data
+		//   //uri => this.setState({ imageURI : uri }),
+		// )
+		// fetch('', {
+		// 	method: 'POST',
+		// 	headers: {
+		// 	  Accept: 'application/json',
+		// 	  'Content-Type': 'application/json',
+		// 	},
+		// 	body: JSON.stringify({
+		// 	//   frameBase: data,
+		// 	}),
+		//   });
+		//   ;
 	  }
 
     takeFrame = async function(){
