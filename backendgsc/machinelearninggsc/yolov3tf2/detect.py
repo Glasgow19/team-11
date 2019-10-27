@@ -20,11 +20,8 @@ flags.DEFINE_string('output', './output.jpg', 'path to output image')
 flags.DEFINE_integer('num_classes', 80, 'number of classes in the model')
 
 
-def main(_argv):
-    if FLAGS.tiny:
-        yolo = YoloV3Tiny(classes=FLAGS.num_classes)
-    else:
-        yolo = YoloV3(classes=FLAGS.num_classes)
+def main():
+    yolo = YoloV3(classes=FLAGS.num_classes)
 
     yolo.load_weights(FLAGS.weights)
     logging.info('weights loaded')
@@ -52,8 +49,13 @@ def main(_argv):
     cv2.imwrite(FLAGS.output, img)
     logging.info('output saved to: {}'.format(FLAGS.output))
 
-if __name__ == '__main__':
+
+def run():
     try:
         app.run(main)
     except SystemExit:
         pass
+
+
+if __name__ == '__main__':
+    run()
