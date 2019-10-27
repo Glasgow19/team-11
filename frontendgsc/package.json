@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "native-base": "^2.13.8",
     "react": "16.9.0",
     "react-native": "0.61.2",

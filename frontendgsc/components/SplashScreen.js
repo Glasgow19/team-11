@@ -4,7 +4,7 @@ import { View, Image } from 'react-native';
 
 const SplashScreen = (props) => {
     setTimeout( () => {
-        props.navigation.navigate('LoginPage');
+        props.navigation.navigate('LanguagePage');
     }, 1000);
     return (
         <View style = {{flex:12,

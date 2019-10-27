@@ -134,7 +134,8 @@ const LanguagePage = props => {
               justifyContent: 'center',
               width: 300,
               height: 60,
-            }}>
+            }}
+            onPress = { ()=>{props.navigation.navigate('HomePage')}}>
             <Text style={{fontSize: 30, fontWeight: 'bold'}}>Continue</Text>
           </Button>
         </View>

@@ -19,7 +19,7 @@ const AppNavigator = createStackNavigator({
   SplashScreen,
   Animation
 }, {
-  initialRouteName: 'Animation',
+  initialRouteName: 'SplashScreen',
   headerMode: 'none',
   navigationOptions: {
     headerVisible: false,

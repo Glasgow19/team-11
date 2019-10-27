@@ -1,8 +1,10 @@
 import React from 'react';
-import { Dimensions, Alert, StyleSheet, ActivityIndicator, Text } from 'react-native';
+import { Dimensions, StyleSheet, View, Text } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import CaptureButton from './CaptureButton.js';
 import { captureScreen } from "react-native-view-shot";
+import {Button} from 'native-base';
+import {Icon } from 'native-base';
 
 export default class Camera extends React.Component {
 
@@ -71,6 +73,23 @@ export default class Camera extends React.Component {
 	render() {
 		return (
             <RNCamera ref={ref => {this.camera = ref;}} style={styles.preview}>
+				<View style = {{flex:1,justifyContent:"flex-end"}} >
+					<Button
+					style={{
+					backgroundColor: '#B2FF82',
+					justifyContent: 'center',
+					flexDirection: 'row',
+					justifyContent: 'center',
+					alignItems: 'center',
+					width: 500,
+					height: 50,
+					// translateX:150
+					}}
+					onPress = { ()=>{props.navigation.navigate('HomePage')}}>
+					{/* <Icon name='help' /> */}
+					<Text style={{fontSize: 25, fontWeight: 'bold'}}>Help</Text>
+				</Button>
+				</View>
             </RNCamera>
 		);
 	}
