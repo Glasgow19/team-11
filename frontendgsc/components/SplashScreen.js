@@ -7,12 +7,11 @@ const SplashScreen = (props) => {
         props.navigation.navigate('LanguagePage');
     }, 1000);
     return (
-        <View style = {{flex:12,
-            backgroundColor:"#ffffff",justifyContent:"center",
-            alignContent:"center", alignSelf:"center"}}>
+        <View style = {{flex:1,
+            backgroundColor:"#131313",justifyContent:"center",paddingHorizontal:100}}>
             <Image
-                style={{width: 250,resizeMode: 'contain'}}
-                source={require('../assets/logo.jpg')}
+                style={{paddingHorizontal:100,width:100,resizeMode: 'contain'}}
+                source={require('../assets/logo.png')}
             />
         </View>
     )
