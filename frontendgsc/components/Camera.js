@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React,{useEffect,useState} from 'react';
 import { Dimensions, StyleSheet, View, Text} from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import CaptureButton from './CaptureButton.js';
@@ -121,8 +121,12 @@ const styles = StyleSheet.create({
 	}
 });
 const Tip = (props) => {
+	var [saidOnce, setSaidOnce]= useState(false);
 	useEffect(() => {
-		Tts.speak(props.text)
+		if (!saidOnce){
+			Tts.speak(props.text);
+			setSaidOnce(true);			
+		}
 	  });
 	return(
 		<Text style={{fontSize: 20, fontWeight: 'bold',color:"#F1F1F1", backgroundColor:"#131313",marginHorizontal:80,
