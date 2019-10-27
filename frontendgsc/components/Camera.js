@@ -87,7 +87,7 @@ export default class Camera extends React.Component {
 						textAlign:"center",paddingHorizontal:10,paddingVertical:10}}>
 							Team 11 is the best 
 						</Text>
-						{}
+						
 						: null}
 						<Button
 							style={{
