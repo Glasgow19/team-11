@@ -36,6 +36,10 @@ target 'frontendgsc' do
 
   pod 'react-native-camera', :path => '../node_modules/react-native-camera'
 
+  pod 'TextToSpeech', :path => '../node_modules/react-native-tts'
+
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'frontendgscTests' do
     inherit! :search_paths
     # Pods for testing

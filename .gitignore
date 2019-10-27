@@ -128,3 +128,5 @@ backendgsc/saved_images
 
 
 yolov3.weights
+
+.DS_Store
