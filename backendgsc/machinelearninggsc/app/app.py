@@ -81,7 +81,7 @@ def image():
         wh, detections = predict(img, is_file=True)
         global_time = new_time
         return jsonify({"response": describe(wh[0], wh[1], detections)})
-    return Response("Status: Too many requests...")
+    return jsonify({"response":" Too many requests..."})
 
 # @app.route('/data', methods=['GET'])
 
