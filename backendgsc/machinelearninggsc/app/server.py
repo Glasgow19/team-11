@@ -67,7 +67,8 @@ def image():
     if request.method == 'GET':
         return
     #     save image to local dir. assume jpg as phones capture jpg
-    img = request.form.get('image')
+    data = request.get_json()
+    img = data['image']
     try:
         # todo: convert to base64
         print(img)
@@ -172,7 +173,7 @@ def describe():
 
 
 if __name__ == '__main__':
-    #run()
+    # run()
     if not os.path.isdir('saved_images'):
         os.mkdir('saved_images')
     app.run(host="0.0.0.0", port=80)
