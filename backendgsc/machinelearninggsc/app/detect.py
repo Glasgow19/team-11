@@ -57,7 +57,7 @@ def predict(img="./data/meme.jpg", is_file=False):
         # logging.info('\t{}, {}, {}'.format(class_names[int(classes[0][i])],
         #                                    np.array(scores[0][i]),
         #                                    np.array(boxes[0][i])))
-    return detections
+    return wh, detections
     # img = cv2.imread(FLAGS.image)
     # img = draw_outputs(img, (boxes, scores, classes, nums), class_names)
     # cv2.imwrite(FLAGS.output, img)

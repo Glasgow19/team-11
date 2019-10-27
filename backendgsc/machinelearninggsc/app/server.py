@@ -69,20 +69,15 @@ def image():
         return
     #     save image to local dir. assume jpg as phones capture jpg
     data = request.get_json()
-    print("Request here")
-    #try:
-    # todo: convert to base64
     img = data['image']
     img = base64.b64decode(img)
-    print("Woah")
-    print(predict(img, is_file=True))
+    wh, detections = predict(img, is_file=True)
+    print(describe(wh[0], wh[1], detections))
     return Response('save success\n', 200)
-    #except Exception as e:
-    #return Response('save fail\n', 500)
 
 
-@app.route('/data', methods=['GET'])
-def data():
+# @app.route('/data', methods=['GET'])
+def get_planeteriums_events():
     query = """
     {
         gammaEvents{
@@ -120,7 +115,8 @@ def data():
     for event in li:
         if event["ResDate"] == str(today) and event["Category"] == "Public" and event["Area"] == location:
             list_of_events.append(event["ResName"])
-    return jsonify({'response': list_of_events})
+
+    return "There are following events at Planetarium today: "+", ".join(list_of_events)+"."
 
 
 # list of objects
@@ -129,14 +125,13 @@ def data():
 #   topLeft, topRight, bottomLeft, bottomRight coordinates where item is located: [x, y]
 # ] imageWidth, imageHeight }
 # find out in which section of the image is the item in
-@app.route('/describe', methods=['POST'])
-def describe():
-    resp = dict()
-    req_data = request.get_json()
-    for item in req_data['data']:
+def describe(img_width, img_height, data):
+    response = ""
+    for item in data:
         name = item['name']
-        img_height = item['height']
-        img_width = item['width']
+        if name == "person":
+            name = "Planetarium"
+
         half_height = img_height / 2
         half_width = img_width / 2
         # [x, y]
@@ -171,11 +166,16 @@ def describe():
             resp[name] = {'text': return_string.format(
                 name, 'right'), 'dir': 'right'}
 
-    return resp
+        response += resp[name]['text']
+        if name == "Planeteriun":
+            description = get_planeteriums_events()
+            response += " "+description
+    return response
 
 
 if __name__ == '__main__':
-    run()
-    if not os.path.isdir('saved_images'):
-        os.mkdir('saved_images')
-    app.run(host="0.0.0.0", port=80)
+    print(get_planeteriums_events())
+    # run()
+    # if not os.path.isdir('saved_images'):
+    #     os.mkdir('saved_images')
+    # app.run(host="0.0.0.0", port=80)
