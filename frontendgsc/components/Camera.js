@@ -28,10 +28,10 @@ export default class Camera extends React.Component {
 		this.setState({modalVisible: visible});
 	}
 	componentDidMount() {
-		// this.cameraInterval = setInterval(async () => {
-		// 	this.takeFrame();
+		this.cameraInterval = setInterval(async () => {
+		this.takeFrame();
 		// 	// this.takeScreenShot();
-		// }, 1500);
+		 }, 1500);
 	}
 
 	componentWillUnmount() {
@@ -102,6 +102,7 @@ export default class Camera extends React.Component {
 						: null}
 						<Button
 							style={{
+								
 							backgroundColor: '#B2FF82',
 							justifyContent: 'center',
 							flexDirection: 'row',
@@ -109,8 +110,7 @@ export default class Camera extends React.Component {
 							alignItems: 'center',
 							width: 500,
 							height: 50,
-							}}
-							onPress = { this.onClickToHelp }>
+							}}>
 							<Text style={{fontSize: 25, fontWeight: 'bold'}}>Help</Text>
 						</Button>
 				</View>
