@@ -120,12 +120,12 @@ def get_planeteriums_events():
     li = result["data"]["gammaEvents"]
     today = datetime.date(datetime.now())
     location = "Planetarium"
-    list_of_events = list()
+    list_of_events = set()
     for event in li:
         if event["ResDate"] == str(today) and event["Category"] == "Public" and event["Area"] == location:
-            list_of_events.append(event["ResName"])
+            list_of_events.add(event["ResName"])
 
-    return "There are following events at Planetarium today: "+", ".join(list_of_events)+"."
+    return "There are following events at Planetarium today: "+", ".join(list(list_of_events))+"."
 
 
 # list of objects
