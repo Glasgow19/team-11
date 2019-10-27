@@ -6,6 +6,8 @@ import os
 import requests
 from datetime import datetime
 from detect import run, predict
+from flask import jsonify
+
 
 app = Flask(__name__)
 
@@ -64,7 +66,8 @@ def image():
     try:
         # todo: convert to base64
         pil_img = Image.open(img)
-        pil_img.save('saved_images/' + str(uuid4()) + '.jpg')
+        print(pil_img)
+        # pil_img.save('saved_images/' + str(uuid4()) + '.jpg')
         return Response('save success\n', 200)
     except Exception as e:
         return Response('save fail\n', 500)
