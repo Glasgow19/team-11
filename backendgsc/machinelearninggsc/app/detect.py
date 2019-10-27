@@ -25,7 +25,7 @@ class_names = None
 def predict(img="./data/meme.jpg", is_file=False):
     global yolo
     global class_names
-    if is_array:
+    if is_file:
         img = tf.image.decode_image(img, channels=3)
     else:
         img = tf.image.decode_image(open(img, 'rb').read(), channels=3)

@@ -69,14 +69,16 @@ def image():
         return
     #     save image to local dir. assume jpg as phones capture jpg
     data = request.get_json()
-    try:
-        # todo: convert to base64
-        img = data['image']
-        img = Image.open(BytesIO(base64.b64decode(img)))
-        predict(img, is_file=True)
-        return Response('save success\n', 200)
-    except Exception as e:
-        return Response('save fail\n', 500)
+    print("Request here")
+    #try:
+    # todo: convert to base64
+    img = data['image']
+    img = base64.b64decode(img)
+    print("Woah")
+    print(predict(img, is_file=True))
+    return Response('save success\n', 200)
+    #except Exception as e:
+    #return Response('save fail\n', 500)
 
 
 @app.route('/data', methods=['GET'])
