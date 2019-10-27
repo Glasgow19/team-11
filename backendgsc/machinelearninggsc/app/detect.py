@@ -36,13 +36,17 @@ def predict(img="./data/meme.jpg"):
 
     logging.info('detections:')
     detections = []
-    wh = np.flip(img.shape[0:2])
+    wh = np.flip(img.shape[1:3])
     for i in range(nums[0]):
-        x1y1 = tuple((np.array(boxes[0][i][0:2]) * wh).astype(np.int32))
-        x2y2 = tuple((np.array(boxes[0][i][2:4]) * wh).astype(np.int32))
+        current_box = boxes[0][i]
+        x1y1 = tuple(
+            (np.array((current_box[0], current_box[2])) * wh))
+        x2y2 = tuple(
+            (np.array((current_box[2], current_box[3])) * wh))
+        score = np.array(scores[0][i])
         detection = dict(
             className=class_names[int(classes[0][i])],
-            score=np.array(scores[0][i]),
+            score=float(score),
             topLeft=x1y1,
             bottomLeft=x2y2,
         )
