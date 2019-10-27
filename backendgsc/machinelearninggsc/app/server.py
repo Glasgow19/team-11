@@ -2,6 +2,7 @@ from flask import Flask, request, abort, Response, jsonify
 from PIL import Image
 from math import hypot
 from uuid import uuid4
+import sys
 import os
 import requests
 from datetime import datetime
@@ -161,7 +162,11 @@ def describe(img_width, img_height, data):
 
 
 if __name__ == '__main__':
+    try:
+        server_port = int(sys.argv[1])
+    except Exception:
+        server_port = 8080
     run()
     if not os.path.isdir('saved_images'):
         os.mkdir('saved_images')
-    app.run(host="0.0.0.0", port=80)
+    app.run(host="0.0.0.0", port=server_port, debug=True)
