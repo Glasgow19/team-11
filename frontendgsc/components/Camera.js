@@ -44,16 +44,6 @@ export default class Camera extends React.Component {
 		//   result => data
 		//   //uri => this.setState({ imageURI : uri }),
 		// )
-		// fetch('', {
-		// 	method: 'POST',
-		// 	headers: {
-		// 	  Accept: 'application/json',
-		// 	  'Content-Type': 'application/json',
-		// 	},
-		// 	body: JSON.stringify({
-		// 	//   frameBase: data,
-		// 	}),
-		//   });
 		//   ;
 	  }
 
@@ -66,10 +56,23 @@ export default class Camera extends React.Component {
             };
 			
 			// Get the base64 version of the image
-			const data = await this.camera.takePictureAsync(options)
-
-			//POST the frame
-			//this.sendFrame(data.base64);
+			try {
+				const data = await this.camera.takePictureAsync(options)
+	
+				//POST the frame
+				fetch('http://178.62.19.14/image', {
+					method: 'POST',
+					headers: {
+					  Accept: 'application/json',
+					  'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+					  image: data.base64,
+					}),
+				  });
+			} catch {
+				console.log("Whoops! Server down! My bad.");
+			}
 		}
 	}
     
