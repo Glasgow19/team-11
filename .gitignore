@@ -125,3 +125,6 @@ dmypy.json
 .pyre/
 
 backendgsc/saved_images
+
+
+yolov3.weights
