@@ -7,16 +7,19 @@ import { Root } from 'native-base';
 import LoginPage from './components/LoginPage';
 import HomePage from './components/HomePage';
 import LanguagePage from './components/LanguagePage';
-
+import SplashScreen from './components/SplashScreen';
+import Animation from './components/LeftArrow';
 
 console.disableYellowBox = true;
 
 const AppNavigator = createStackNavigator({
   LoginPage,
   HomePage,
-  LanguagePage
+  LanguagePage,
+  SplashScreen,
+  Animation
 }, {
-  initialRouteName: 'LoginPage',
+  initialRouteName: 'Animation',
   headerMode: 'none',
   navigationOptions: {
     headerVisible: false,
