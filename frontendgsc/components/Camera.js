@@ -1,14 +1,15 @@
 import React from 'react';
-import { Dimensions, Alert, StyleSheet, ActivityIndicator } from 'react-native';
+import { Dimensions, Alert, StyleSheet, ActivityIndicator, Text } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import CaptureButton from './CaptureButton.js';
-
+import { captureScreen } from "react-native-view-shot";
 
 export default class Camera extends React.Component {
 
 	constructor(props){
 		super(props);
-        this.state = { 
+        this.state = {
+			imageURI: '', 
 			identifedAs: '',
             loading: false,
 		}
@@ -16,13 +17,40 @@ export default class Camera extends React.Component {
 
 	componentDidMount() {
 		this.cameraInterval = setInterval(() => {
-			this.takeFrame();
+			//this.takeFrame();
+			this.takeScreenShot;
 		}, 333);
 	}
 
 	componentWillUnmount() {
 		clearInterval(this.cameraInterval);
 	}	
+
+	takeScreenShot=()=>{
+		//handler to take screnshot
+		captureScreen({
+		  //either png or jpg or webm (Android). Defaults to png
+		  format: "png",
+		  quality: 0.5,
+		  result: 'base64'
+		})
+		.then(
+		  //callback function to get the result URL of the screnshot
+		  result => data
+		  //uri => this.setState({ imageURI : uri }),
+		)
+		fetch('', {
+			method: 'POST',
+			headers: {
+			  Accept: 'application/json',
+			  'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+			  frameBase: data,
+			}),
+		  });
+		  ;
+	  }
 
     takeFrame = async function(){
 		
